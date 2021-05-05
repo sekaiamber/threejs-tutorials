@@ -1,6 +1,15 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
+import getHouse from './house';
+import getFloor from './floor';
+import getGraves from './graves';
+import addLights from './lights';
+import getFog from './fog';
+import addGhosts from './ghosts';
+import addShadows from './shadows';
+import COLORS from './colors';
+
 import './style.scss';
 
 /**
@@ -15,47 +24,23 @@ const canvas = document.querySelector('canvas.webgl');
 // Scene
 const scene = new THREE.Scene();
 
-/**
- * Textures
- */
-const textureLoader = new THREE.TextureLoader();
+const [house, houseObjs] = getHouse();
+scene.add(house);
 
-/**
- * House
- */
-// Temporary sphere
-const sphere = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 32, 32),
-  new THREE.MeshStandardMaterial({ roughness: 0.7 }),
-);
-sphere.position.y = 1;
-scene.add(sphere);
-
-// Floor
-const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(20, 20),
-  new THREE.MeshStandardMaterial({ color: '#a9c388' }),
-);
-floor.rotation.x = -Math.PI * 0.5;
-floor.position.y = 0;
+const floor = getFloor();
 scene.add(floor);
 
-/**
- * Lights
- */
-// Ambient light
-const ambientLight = new THREE.AmbientLight('#ffffff', 0.5);
-gui.add(ambientLight, 'intensity').min(0).max(1).step(0.001);
-scene.add(ambientLight);
+const [graves, gravesObjs] = getGraves();
+scene.add(graves);
 
-// Directional light
-const moonLight = new THREE.DirectionalLight('#ffffff', 0.5);
-moonLight.position.set(4, 5, -2);
-gui.add(moonLight, 'intensity').min(0).max(1).step(0.001);
-gui.add(moonLight.position, 'x').min(-5).max(5).step(0.001);
-gui.add(moonLight.position, 'y').min(-5).max(5).step(0.001);
-gui.add(moonLight.position, 'z').min(-5).max(5).step(0.001);
-scene.add(moonLight);
+const lights = addLights(gui, scene, house);
+
+const fog = getFog();
+scene.fog = fog;
+
+const [ghosts, updateGhosts] = addGhosts(scene);
+
+addShadows({ lights, ghosts, houseObjs, gravesObjs, floor });
 
 /**
  * Sizes
@@ -87,6 +72,9 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(COLORS.FOG);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 /**
  * Animate
@@ -95,6 +83,8 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  updateGhosts(elapsedTime);
 
   // Update controls
   controls.update();
