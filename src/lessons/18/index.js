@@ -1,7 +1,15 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import particles, { update } from './customParticles';
+import * as dat from 'dat.gui';
+import initGalaxy from './galaxy';
+
 import './style.scss';
+
+/**
+ * Base
+ */
+// Debug
+const gui = new dat.GUI();
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -9,8 +17,7 @@ const canvas = document.querySelector('canvas.webgl');
 // Scene
 const scene = new THREE.Scene();
 
-
-scene.add(particles);
+initGalaxy(scene, gui);
 
 /**
  * Sizes
@@ -25,6 +32,8 @@ const sizes = {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+camera.position.x = 3;
+camera.position.y = 3;
 camera.position.z = 3;
 scene.add(camera);
 
@@ -48,9 +57,6 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
-
-  // particles.rotation.y = elapsedTime * 0.2;
-  update(elapsedTime);
 
   // Update controls
   controls.update();
