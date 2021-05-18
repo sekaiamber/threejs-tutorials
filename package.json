@@ -63,6 +63,7 @@
   ],
   "dependencies": {
     "@babel/polyfill": "^7.8.3",
+    "cannon": "^0.6.2",
     "classnames": "^2.2.6",
     "clipboard": "^2.0.6",
     "dat.gui": "^0.7.7",
