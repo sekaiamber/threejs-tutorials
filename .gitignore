@@ -63,3 +63,6 @@ build/*
 .idea
 .toastio.json
 dist
+
+21-imported-models.zip
+src/lessons/21/static/models/*
