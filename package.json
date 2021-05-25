@@ -11,7 +11,8 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "build": "webpack --progress --colors --watch --config webpack/webpack.dev.config.js",
-    "dev": "webpack-dev-server --progress --colors --port 8091 --display-error-details --inline --hot --content-base root/build --config webpack/webpack.config.js"
+    "dev": "webpack-dev-server --progress --colors --port 8091 --display-error-details --inline --hot --content-base root/build --config webpack/webpack.config.js",
+    "static_proxy": "http-server ./staticProxy"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

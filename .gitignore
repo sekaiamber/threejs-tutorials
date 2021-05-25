@@ -65,4 +65,8 @@ build/*
 dist
 
 21-imported-models.zip
+23-realistic-render.zip
+
 src/lessons/21/static/models/*
+
+staticProxy

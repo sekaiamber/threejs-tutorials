@@ -2,6 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 var fs = require('fs');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+const config = require('./config.json');
 
 var floders = fs.readdirSync(path.join(__dirname, '..', '/src/lessons'));
 
@@ -32,7 +33,21 @@ var rewrites = routers.map(r => ({
   to: '/' + r.filename,
 }));
 
-var config = {
+var apis = [
+  config.STATIC_PROXY,
+];
+
+var proxy = {};
+apis.forEach((api) => {
+  proxy[api] = {
+    target: config.STATIC_PROXY_TARGET,
+    changeOrigin: true,
+    secure: false,
+    pathRewrite: { '^/static': '' },
+  };
+})
+
+module.exports = {
   mode: 'development',
   context: path.join(__dirname, '..', '/src'),
   entry,
@@ -44,6 +59,7 @@ var config = {
       index: '/',
       rewrites,
     },
+    proxy,
   },
   output: {
     path: path.join(__dirname, '..', '/build'),
@@ -127,5 +143,3 @@ var config = {
     three: 'THREE',
   },
 };
-
-module.exports = config;

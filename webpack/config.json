@@ -1,0 +1,4 @@
+{
+  "STATIC_PROXY": "/static",
+  "STATIC_PROXY_TARGET": "http://localhost:8080"
+}
