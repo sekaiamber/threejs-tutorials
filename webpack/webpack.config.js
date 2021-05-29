@@ -115,6 +115,12 @@ module.exports = {
         },
       ],
     }, {
+      test: /\.glsl$/,
+      use: [{
+          loader: 'raw-loader'
+        },
+      ],
+    }, {
       test: /\.(png|jpg|gif|svg|mp3|mp4|blob|woff|woff2|webp|eot|ttf|typeface|glb)$/,
       use: [{
         loader: 'file-loader',
