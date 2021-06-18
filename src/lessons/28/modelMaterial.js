@@ -2,7 +2,6 @@
 import * as THREE from 'three';
 import { staticProxy } from '../../utils';
 import vertexShader from './shaders/model/vertex';
-import fragmentShader from './shaders/1.frag.glsl';
 
 
 // Textures
